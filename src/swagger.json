@@ -1,3 +1,84 @@
 {
-
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.6",
+    "title": "Handling API Products",
+    "description": "This API has the purpose of handling shop products",
+    "termsOfService": "http://localhost:3000/terms",
+    "contact": {
+      "email": "sdssdd@gmail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "products",
+      "description": "list products",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "#"
+      }
+    }
+  ],
+  "paths": {
+    "/products": {
+      "post": {
+        "tags": ["Products"],
+        "summary": "Register new product",
+        "description": "Route responsible for adding new products",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "body",
+            "description": "Product object to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number"
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "example": {
+        "name": "Keyboard",
+        "description": "RGB",
+        "price": 180,
+        "id": "d6c70340-25b7-11ec-9621-0242ac130002"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
 }

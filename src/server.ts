@@ -7,8 +7,8 @@ app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.get("/terms", (request, response) => {
   return response.json({
-    message: "Termos de serviço",
+    message: "Service Terms",
   });
 });
-app.use("v1", router);
+app.use("/v1", router);
 app.listen(3000, () => console.log("Server is running on port 3000"));

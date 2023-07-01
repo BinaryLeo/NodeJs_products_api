@@ -1,83 +1,216 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.1",
   "info": {
-    "version": "1.0.6",
-    "title": "Handling API Products",
-    "description": "This API has the purpose of handling shop products",
+    "title": "BinaryLeo API Products",
+    "description": "This is an API test to explore Swagger Documentation without using any database.",
     "termsOfService": "http://localhost:3000/terms",
     "contact": {
-      "email": "sdssdd@gmail.com"
-    }
+      "email": "email@mail.com"
+    },
+    "version": "1.0.8"
   },
-  "tags": [
+  "servers": [
     {
-      "name": "products",
-      "description": "list products",
-      "externalDocs": {
-        "description": "Find out more",
-        "url": "#"
-      }
+      "url": "http://localhost:3000/v1",
+      "description": "Test API V1"
+    },
+    {
+      "url": "http://localhost:3000/v2",
+      "description": "Test API V2"
     }
   ],
   "paths": {
     "/products": {
       "post": {
-        "tags": ["Products"],
-        "summary": "Register new product",
+        "summary": "Add a new product",
         "description": "Route responsible for adding new products",
+        "tags": ["Products"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              },
+              "examples": {
+                "Mouse USB": {
+                  "value": {
+                  
+                    "name": "USB Mouse RDP 230",
+                    "description": "USB RGB Mouse",
+                    "price": 300
+                  }
+                },
+                "MDC Keyboard wireless": {
+                  "value": {
+                    
+                    "name": "Mechanical Wireless Keyboard",
+                    "description": "Black Wireless Keyboard",
+                    "price": 850
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Product already exists!"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/findByName": {
+      "get": {
+        "description": "Search a product by name",
+        "summary": "Route responsible for searching a product by name",
+        "tags": ["Products"],
         "parameters": [
           {
-            "name": "product",
-            "in": "body",
-            "description": "Product object to be added",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Product"
-            }
+            "name": "name",
+            "in": "query",
+            "description": "The name of the product to search",
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/ApiResponse"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items":{
+                    "$ref": "#/components/schemas/Product"
+                  }
+                
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "description": "Search a product by ID",
+        "summary": "Route responsible for searching a product by ID",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the product to search",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put":{
+        "description": "Alter a product by ID",
+        "summary": "Route responsible for update a product by ID",
+        "tags": ["Products"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the product to search",
+            "required": true
+          }
+        ],"requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              },
+              "examples": {
+                "Mouse USB": {
+                  "value": {
+                    "name": "USB Mouse RDP 230",
+                    "description": "USB RGB Mouse",
+                    "price": 380
+                  }
+                },
+                "MDC Keyboard wireless": {
+                  "value":{
+                    "name": "Mechanical Wireless Keyboard",
+                    "description": "Black Wireless Keyboard",
+                    "price": 780
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
             }
           }
         }
       }
     }
   },
-  "definitions": {
-    "Product": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "price": {
-          "type": "number"
-        },
-        "id": {
-          "type": "string",
-          "format": "uuid"
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
         }
-      },
-      "example": {
-        "name": "Keyboard",
-        "description": "RGB",
-        "price": 180,
-        "id": "d6c70340-25b7-11ec-9621-0242ac130002"
       }
     },
-    "ApiResponse": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string"
-        }
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

@@ -50,6 +50,7 @@ router.put("/products/:id", ensuredAuthenticated, (request, response) => {
     return response.status(400).json({ messag: "Product doesn't exists!" });
   }
   const product: ProductsDTO = Object.assign({
+    id,
     name,
     description,
     price,
